@@ -473,7 +473,7 @@ data &lt;- data_clean |&gt;
 ##  53  -- a number    N/A
 ##  54  -- a number    N/A
 ## ℹ Run `dplyr::last_dplyr_warnings()` to see the 3 remaining warnings.</code></pre>
-<pre class="r"><code>write.csv(data, &quot;../data/state_local_tax_undoc_2022.csv&quot;)
+<pre class="r"><code>write.csv(data, &quot;data/state_local_tax_undoc_2022.csv&quot;)
 
 #Remember to credit the source in your articles: Institute on Taxation and Economic Policy</code></pre>
 <pre class="r"><code>#Cleaning undocumented immigrant population and income data
@@ -485,7 +485,7 @@ undoc_immigrant_income_pop &lt;- undoc_immigrant_income_pop_clean |&gt;
     aggregate_income=as.numeric(parse_number(aggregate_income))
     )
 
-write_csv(undoc_immigrant_income_pop, &quot;../data/aggregate_income_undoc_2022.csv&quot;)
+write_csv(undoc_immigrant_income_pop, &quot;data/aggregate_income_undoc_2022.csv&quot;)
 
 #Remember to credit the source in your articles: Institute on Taxation and Economic Policy</code></pre>
 <p>#BACKUP CODE FOR LATER</p>

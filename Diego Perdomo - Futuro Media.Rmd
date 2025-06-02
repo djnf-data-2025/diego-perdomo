@@ -31,8 +31,8 @@ data: <https://michaelzhangreporter.github.io/Houston_Campaign_Finance/>
 Here's what your newsroom suggested for a project:
 
 ***The team has decided to request Diego research people paying taxes to
-the IRS via ITIN number. Please let me know if you have any questions.
-Have a great weekend! Yolanda***
+the IRS via ITIN number. Please let me know if you have any
+questions.cHave a great weekend! Yolanda***
 
 This notebook helps you get started by extracting data from Table 1 of
 this report: <https://itep.org/undocumented-immigrants-taxes-2024/>
@@ -118,6 +118,7 @@ write.csv(data, "data/state_local_tax_undoc_2022.csv")
 
 #Remember to credit the source in your articles: Institute on Taxation and Economic Policy
 ```
+
 ```{r}
 #Cleaning undocumented immigrant population and income data
 undoc_immigrant_income_pop <- undoc_immigrant_income_pop_clean |> 
@@ -168,9 +169,24 @@ glimpse(data)
 # Data exploration: taxes paid
 
 ```{r}
+##Decending Totals
+#Total State and Local 
 data |> 
   select(state, total_state_and_local_taxes) |> 
   arrange(desc(total_state_and_local_taxes))
+  ggplot(data,)
+
+#Total Sales Tax 
+data |> 
+  select(state, sales_and_excise_taxes) |> 
+  arrange(desc(sales_and_excise_taxes))
+
+#Total Property 
+data |> 
+  select(state, property_taxes) |> 
+  arrange(desc(property_taxes))
+
+##Per capita
 ```
 
 ```{r}
@@ -181,7 +197,7 @@ data |>
 ```
 
 ```{r}
-data |> 
+#data |> 
 ```
 
 # Questions
