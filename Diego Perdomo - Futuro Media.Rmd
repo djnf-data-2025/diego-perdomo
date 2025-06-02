@@ -114,7 +114,21 @@ data <- data_clean |>
      effective_tax_rate=as.numeric(parse_number(effective_tax_rate)),
     )
 
-write.csv(data, "../data/state_local_tax_undoc_2022.csv")
+#write.csv(data, "../data/state_local_tax_undoc_2022.csv")
+
+#Remember to credit the source in your articles: Institute on Taxation and Economic Policy
+```
+```{r}
+#Cleaning undocumented immigrant population and income data
+undoc_immigrant_income_pop <- undoc_immigrant_income_pop_clean |> 
+  clean_names() |> 
+  #remove dollar signs
+  mutate(
+    population=as.numeric(parse_number(population)),
+    aggregate_income=as.numeric(parse_number(aggregate_income))
+    )
+
+#write.csv(data, "../data/aggregate_income_undoc_2022.csv")
 
 #Remember to credit the source in your articles: Institute on Taxation and Economic Policy
 ```
