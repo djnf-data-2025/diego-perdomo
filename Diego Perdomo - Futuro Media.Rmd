@@ -2,31 +2,43 @@
 title: "Diego Perdomo - Futuro Media"
 output: html_document
 date: "2025-04-22"
+editor_options: 
+  markdown: 
+    wrap: 72
 ---
 
 A demo notebook for Dow Jones News Fund data interns
 
-During the week’s training, you will work on a project called Investigate Your Community to produce detailed story pitches relevant to their summer internship positions. The goal is to have the students research a topic relevant to your newsroom so they can get to work immediately at the internship. 
+During the week’s training, you will work on a project called
+Investigate Your Community to produce detailed story pitches relevant to
+their summer internship positions. The goal is to have the students
+research a topic relevant to your newsroom so they can get to work
+immediately at the internship.
 
 Here are some examples from last year’s DJNF data journalism training:
 
-Hannah Rosenberger, at ASI Media/Counselor magazine, produced this analysis on name, image and likeness trends: https://hrosenberger.github.io/ASI-NIL-Project/
+Hannah Rosenberger, at ASI Media/Counselor magazine, produced this
+analysis on name, image and likeness trends:
+<https://hrosenberger.github.io/ASI-NIL-Project/>
 
-Shifra Dayak, an intern at the Connecticut Mirror, produced this analysis of environment spill data: https://shifradayak.github.io/DJNF_Merrill/ct_env_spills.html.
+Shifra Dayak, an intern at the Connecticut Mirror, produced this
+analysis of environment spill data:
+<https://shifradayak.github.io/DJNF_Merrill/ct_env_spills.html>.
 
-Michael Zhang, an intern at the Houston Landing, explored local election data: https://michaelzhangreporter.github.io/Houston_Campaign_Finance/
-
+Michael Zhang, an intern at the Houston Landing, explored local election
+data: <https://michaelzhangreporter.github.io/Houston_Campaign_Finance/>
 
 Here's what your newsroom suggested for a project:
-The team has decided to request Diego research people paying taxes to the IRS via ITIN number.  
-Please let me know if you have any questions. 
-Have a great weekend!
-Yolanda 
 
+***The team has decided to request Diego research people paying taxes to
+the IRS via ITIN number. Please let me know if you have any questions.
+Have a great weekend! Yolanda***
 
-This notebook helps you get started by extracting data from Table 1 of this report: https://itep.org/undocumented-immigrants-taxes-2024/
+This notebook helps you get started by extracting data from Table 1 of
+this report: <https://itep.org/undocumented-immigrants-taxes-2024/>
 
 # Load software libraries
+
 ```{r}
 #install.packages("tidyverse")
 #install.packages("janitor")
@@ -39,12 +51,14 @@ library(rvest)
 ```
 
 # Scrape a table from this website
-https://itep.org/undocumented-immigrants-taxes-2024/
-APPENDIX TABLE 1.
 
-State and Local Tax Contributions by the Undocumented Immigrant Population in 2022
+<https://itep.org/undocumented-immigrants-taxes-2024/> APPENDIX TABLE 1.
+
+State and Local Tax Contributions by the Undocumented Immigrant
+Population in 2022
+
 ```{r}
-
+#State local tax contribs from undoc immigrants in 2022
 # Read the HTML file from the URL
 url <- "https://itep.org/undocumented-immigrants-taxes-2024/"
 html <- read_html(url)
@@ -65,9 +79,29 @@ data_clean <- data[-1, ] # Remove the first row
 colnames(data_clean) <- new_headers
 ```
 
+```{r}
+#Undocumented immigrants population and income data, 2022
+undoc_immigrant_income_pop <- html |> 
+  html_nodes(xpath = "/html/body/div[1]/div/div[2]/div/div[1]/div[1]/div[8]/table") |> 
+  html_nodes("td") |> 
+  html_text() |> 
+  matrix(ncol = 3, byrow = TRUE) |> 
+  as.data.frame(stringsAsFactors = FALSE)
+
+###Make top consistent
+undoc_immigrant_income_pop_clean <- undoc_immigrant_income_pop 
+
+colnames(undoc_immigrant_income_pop_clean) <-     undoc_immigrant_income_pop[1,]
+
+undoc_immigrant_income_pop_clean <- undoc_immigrant_income_pop_clean[-1,]
+rownames(undoc_immigrant_income_pop_clean) <- 1:nrow(undoc_immigrant_income_pop_clean)
+
+```
 
 # Cleaning
+
 ```{r}
+#Cleaning state local tax contribs from undoc immigrants in 2022
 data <- data_clean |> 
   clean_names() |> 
   #remove dollar signs
@@ -85,8 +119,8 @@ write.csv(data, "../data/state_local_tax_undoc_2022.csv")
 #Remember to credit the source in your articles: Institute on Taxation and Economic Policy
 ```
 
-
 #BACKUP CODE FOR LATER
+
 ```{r}
 # Load your data
 
@@ -98,12 +132,10 @@ write.csv(data, "../data/state_local_tax_undoc_2022.csv")
 
 ```
 
-
-
 Data details:
 
-
 # Explore the data types
+
 ```{r}
 
 #glimpse(YOUR_DATA)
@@ -111,13 +143,13 @@ Data details:
 glimpse(data)
 
 ```
+
 # Code for later Fix dates
+
 ```{r}
 # data <- data |> 
 #   mutate(date = lubridate::mdy(contribution_date))
 ```
-
-
 
 # Data exploration: taxes paid
 
@@ -127,35 +159,57 @@ data |>
   arrange(desc(total_state_and_local_taxes))
 ```
 
+```{r}
+# Other Taxes by State
+data |> 
+  select(state, other_taxes) |> 
+  arrange(desc(other_taxes))
+```
 
+```{r}
+data |> 
+```
 
-
-# Questions 
+# Questions
 
 Write down questions you want answered:
 
+-   What is the per capita rate for tax totals per state. (tidycensus
+    undocumented counts)?
 
+-   Do states with favorable policies toward undocumented immigrants
+    have friendly tax policies like rates (how will you define favorable
+    policies)?
+
+-   What are the other taxes undocumented immigrants pay and why do
+    Californian undocumented immigrants pay almost 40% of nationwide
+    other taxes.
 
 # Data Details
 
-You will want to read this article carefully and you will probably want to scrape more data from it. 
-https://itep.org/undocumented-immigrants-taxes-2024/
-
+You will want to read this article carefully and you will probably want
+to scrape more data from it.
+<https://itep.org/undocumented-immigrants-taxes-2024/>
 
 A very good article about the issue
-https://unidosus.org/blog/2025/03/24/when-dhs-requests-itin-tax-data-why-every-american-should-be-concerned/
+<https://unidosus.org/blog/2025/03/24/when-dhs-requests-itin-tax-data-why-every-american-should-be-concerned/>
 
 Background on ITIN
-https://www.irs.gov/tin/itin/individual-taxpayer-identification-number-itin
-If you're a resident alien, nonresident alien or their spouse or dependent, you can apply for an ITIN regardless of immigration status.
+<https://www.irs.gov/tin/itin/individual-taxpayer-identification-number-itin>
+If you're a resident alien, nonresident alien or their spouse or
+dependent, you can apply for an ITIN regardless of immigration status.
 
 Resident alien or nonresident alien
 
 If you're not a U.S. citizen, your tax status can be either:
 
-Resident alien – If you were present in the U.S. for more than 183 days* (substantial presence test) or you’re a lawful permanent resident of the U.S. (green card test)
-Nonresident alien – If you don’t meet either the green card or substantial presence test for resident alien status.
-*Special day-counting rules apply to certain foreign government-related individuals, teachers, trainees and students who are temporarily present in the U.S. under certain U.S. visas.
+Resident alien – If you were present in the U.S. for more than 183
+days\* (substantial presence test) or you’re a lawful permanent resident
+of the U.S. (green card test) Nonresident alien – If you don’t meet
+either the green card or substantial presence test for resident alien
+status. \*Special day-counting rules apply to certain foreign
+government-related individuals, teachers, trainees and students who are
+temporarily present in the U.S. under certain U.S. visas.
 
 Determining your tax residency status
 
