@@ -13,7 +13,7 @@ In May, federal courts permitted immigration agencies to access
 confidential, personal information of up to 7 million undocumented
 immigrant taxpayers. This is the first instance where the Internal
 Revenue Service has shared confidential information for the purposes of
-immigration investigation. 
+immigration investigation. **#rsw comment: attribution? \#**
 
 Since 1996, the IRS has permitted people with noncitizen status to file
 their taxes through the Individual Taxpayer Identification Number. The
@@ -34,7 +34,9 @@ investigate:
         with a stacked bar to show how percentages would be if
         undocumented immigrants filed with legal status)
 
--   The impact of the current undocumented tax contributions
+-   The impact of the current undocumented tax contributions **#rsw
+    comment: great but let's clarify - so undocumented people contribute
+    \$100 bln to the economy? \#**
 
     -   With nearly 11 million estimated undocumented immigrants, the
         U.S. sees nearly \$100 billion in tax contributions to federal
@@ -66,30 +68,34 @@ like to produce research that could empower deep dives into communities
 who are having their trust in public assistance programs eroded as their
 private information gets shared by those entities.
 
-# Instructions
+**#rsw comment: cut, make this project focused on your own work**
 
-A demo notebook for Dow Jones News Fund data interns:
+# ~~Instructions~~
 
-During the week’s training, you will work on a project called
+~~A demo notebook for Dow Jones News Fund data interns:~~
+
+~~During the week’s training, you will work on a project called
 Investigate Your Community to produce detailed story pitches relevant to
 their summer internship positions. The goal is to have the students
 research a topic relevant to your newsroom so they can get to work
-immediately at the internship.
+immediately at the internship.~~
 
-Here are some examples from last year’s DJNF data journalism training:
+~~Here are some examples from last year’s DJNF data journalism
+training:~~
 
-Hannah Rosenberger, at ASI Media/Counselor magazine, produced this
+~~Hannah Rosenberger, at ASI Media/Counselor magazine, produced this
 analysis on name, image and likeness trends:
-<https://hrosenberger.github.io/ASI-NIL-Project/>
+<https://hrosenberger.github.io/ASI-NIL-Project/>~~
 
-Shifra Dayak, an intern at the Connecticut Mirror, produced this
+~~Shifra Dayak, an intern at the Connecticut Mirror, produced this
 analysis of environment spill data:
-<https://shifradayak.github.io/DJNF_Merrill/ct_env_spills.html>.
+<https://shifradayak.github.io/DJNF_Merrill/ct_env_spills.html>.~~
 
-Michael Zhang, an intern at the Houston Landing, explored local election
-data: <https://michaelzhangreporter.github.io/Houston_Campaign_Finance/>
+~~Michael Zhang, an intern at the Houston Landing, explored local
+election data:
+<https://michaelzhangreporter.github.io/Houston_Campaign_Finance/>~~
 
-Here's what your newsroom suggested for a project:
+~~Here's what your newsroom suggested for a project:~~
 
 ***The team has decided to request Diego research people paying taxes to
 the IRS via ITIN number. Please let me know if you have any
@@ -119,6 +125,11 @@ Contributing almost 100 billion in taxes
 # Scrape a table from this website
 
 <https://itep.org/undocumented-immigrants-taxes-2024/> APPENDIX TABLE 1.
+
+#RSW comment: **Let's integrate the code better with the narrative.
+Explain that this is a source of undocumented immigrant tax
+contributions by various types. point out the top states by type (sales,
+income, etc) and provide some details about patterns**
 
 State and Local Tax Contributions by the Undocumented Immigrant
 Population in 2022
@@ -200,7 +211,7 @@ write_csv(undoc_immigrant_income_pop, "../data/aggregate_income_undoc_2022.csv")
 #Remember to credit the source in your articles: Institute on Taxation and Economic Policy
 ```
 
-#BACKUP CODE FOR LATER
+~~#BACKUP CODE FOR LATER~~
 
 ```{r}
 # Load your data
@@ -267,11 +278,20 @@ mix |>
   arrange(desc(total_capita))
 ```
 
+#rsw comment: try using datatable to display these tables in a nice html
+format
+
+library(DT)
+
+datatable(DF, caption = "HEADLINE", options = list(pageLength = 20))
+
 ```{r}
 # Other Taxes by State
 data |> 
   select(state, other_taxes) |> 
   arrange(desc(other_taxes))
+
+
 ```
 
 ```{r}
