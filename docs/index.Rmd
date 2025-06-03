@@ -59,6 +59,13 @@ it would be interesting to examine:
 
     -   Commerce and census data pertaining to income and nativity
 
+Through this research, I intend to add new comparisons to data that has
+been discussed among spaces that report on immigrants and taxes for
+almost 11 months. Through national and state level analysis, I would
+like to produce research that could empower deep dives into communities
+who are having their trust in public assistance programs eroded as their
+private information gets shared by those entities.
+
 # Instructions
 
 A demo notebook for Dow Jones News Fund data interns:
