@@ -15,21 +15,32 @@ immigrant taxpayers. This is the first instance where the Internal
 Revenue Service has shared confidential information for the purposes of
 immigration investigation. 
 
-Scrutinizing people who use Individual Taxpayer Identification Number,
-which allows noncitizens and undocumented immigrants to file taxes owed
-to the IRS 
+Since 1996, the IRS has permitted people with noncitizen status to file
+their taxes through the Individual Taxpayer Identification Number. The
+identification number, which permitted undocumented immigrants to file
+their taxes and receive select tax credits, fell under scrutiny in
+recent federal court hearings and prompted the landmark collaboration
+between the Department of Homeland Security and Department of Treasury.
 
 With new questions of undocumented immigrant’s relationship to taxes, I
 think it would be timely and relevant to Futuro’s audience to
 investigate:
 
 -   How undocumented taxpayer contributions differ in makeup from
-    national 
+    citizen taxpayers
 
     -   The portfolio of taxes undocumented immigrants contribute
         compared to the U.S. total of tax revenue (grouped bar chart
         with a stacked bar to show how percentages would be if
         undocumented immigrants filed with legal status)
+
+-   The impact of the current undocumented tax contributions
+
+    -   With nearly 11 million estimated undocumented immigrants, the
+        U.S. sees nearly \$100 billion in tax contributions to federal
+        social programs that do not return to undocumented taxpayers
+
+# Instructions
 
 A demo notebook for Dow Jones News Fund data interns:
 
