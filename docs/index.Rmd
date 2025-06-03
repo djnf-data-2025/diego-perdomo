@@ -7,6 +7,30 @@ editor_options:
     wrap: 72
 ---
 
+# Pitch
+
+In May, federal courts permitted immigration agencies to access
+confidential, personal information of up to 7 million undocumented
+immigrant taxpayers. This is the first instance where the Internal
+Revenue Service has shared confidential information for the purposes of
+immigration investigation. 
+
+Scrutinizing people who use Individual Taxpayer Identification Number,
+which allows noncitizens and undocumented immigrants to file taxes owed
+to the IRS 
+
+With new questions of undocumented immigrant’s relationship to taxes, I
+think it would be timely and relevant to Futuro’s audience to
+investigate:
+
+-   How undocumented taxpayer contributions differ in makeup from
+    national 
+
+    -   The portfolio of taxes undocumented immigrants contribute
+        compared to the U.S. total of tax revenue (grouped bar chart
+        with a stacked bar to show how percentages would be if
+        undocumented immigrants filed with legal status)
+
 A demo notebook for Dow Jones News Fund data interns:
 
 During the week’s training, you will work on a project called
@@ -49,6 +73,11 @@ library(janitor)
 library(readxl)
 library(rvest)
 ```
+
+The Institute on Economic Policy estimates of 11 million undocumented
+immigrants in the U.S.
+
+Contributing almost 100 billion in taxes
 
 # Scrape a table from this website
 
@@ -174,7 +203,6 @@ glimpse(data)
 data |> 
   select(state, total_state_and_local_taxes) |> 
   arrange(desc(total_state_and_local_taxes))
-  ggplot(data,)
 
 #Total Sales Tax 
 data |> 
@@ -187,6 +215,7 @@ data |>
   arrange(desc(property_taxes))
 
 ##Per capita
+#
 ```
 
 ```{r}
