@@ -387,6 +387,27 @@ legal status)</li>
 sees nearly $100 billion in tax contributions to federal social programs
 that do not return to undocumented taxpayers</li>
 </ul></li>
+<li><p>Which states receive the most in specific taxes like sales and
+income</p>
+<ul>
+<li>Are per capita tax rates higher than citizen per capita tax rates in
+specific states?</li>
+</ul></li>
+</ul>
+<p>Given the missing data on the exact counts of undocumented
+immigrants, it would be interesting to examine:</p>
+<ul>
+<li><p>How other tax policy think tanks measure immigrant
+contributions</p>
+<ul>
+<li>Particularly the methodology of these studies and what assumptions
+they make from the holes in their data.</li>
+</ul></li>
+<li><p>Other instances of immigrant contribution to federal, state and
+local revenue</p>
+<ul>
+<li>Commerce and census data pertaining to income and nativity</li>
+</ul></li>
 </ul>
 </div>
 <div id="instructions" class="section level1">
@@ -739,7 +760,122 @@ data |&gt;
 ## 53 Payments to other states             NA
 ## 54        NATIONAL TOTAL***             NA</code></pre>
 <pre class="r"><code>##Per capita
-#</code></pre>
+mix &lt;- inner_join(data, undoc_immigrant_income_pop, by = &quot;state&quot;)
+
+#Sales - likely dependent on sales tax rates and population
+mix |&gt; 
+  select(state, sales_and_excise_taxes, population) |&gt; 
+  mutate(sales_capita = sales_and_excise_taxes/population) |&gt; 
+  arrange(desc(sales_capita))</code></pre>
+<pre><code>##                   state sales_and_excise_taxes population sales_capita
+## 1            Washington              646600000     276000    2342.7536
+## 2              Arkansas              119700000      64000    1870.3125
+## 3             Louisiana              117900000      64000    1842.1875
+## 4                Hawaii               71500000      39000    1833.3333
+## 5             Tennessee              233200000     134000    1740.2985
+## 6            New Mexico              102700000      61000    1683.6066
+## 7               Arizona              422100000     263000    1604.9430
+## 8            California             3878400000    2434000    1593.4265
+## 9                 Texas             2829000000    1863000    1518.5185
+## 10               Nevada              271900000     180000    1510.5556
+## 11          Mississippi               29900000      21000    1423.8095
+## 12              Florida             1059600000     747000    1418.4739
+## 13             Illinois              585600000     422000    1387.6777
+## 14             Oklahoma              122600000      89000    1377.5281
+## 15             New York              919500000     676000    1360.2071
+## 16 District of Columbia               22900000      17000    1347.0588
+## 17              Alabama               79600000      61000    1304.9180
+## 18                 Utah              115700000      92000    1257.6087
+## 19              Indiana              129100000     105000    1229.5238
+## 20         Rhode Island               35500000      29000    1224.1379
+## 21                 Iowa               51300000      42000    1221.4286
+## 22          Connecticut              140400000     117000    1200.0000
+## 23        West Virginia                4800000       4000    1200.0000
+## 24              Georgia              435700000     364000    1196.9780
+## 25             Colorado              184700000     156000    1183.9744
+## 26               Kansas               88600000      75000    1181.3333
+## 27       North Carolina              365900000     314000    1165.2866
+## 28              Wyoming                6900000       6000    1150.0000
+## 29             Nebraska               47700000      42000    1135.7143
+## 30         South Dakota                9000000       8000    1125.0000
+## 31         North Dakota                7700000       7000    1100.0000
+## 32                 Ohio              114100000     104000    1097.1154
+## 33             Kentucky               54800000      51000    1074.5098
+## 34         Pennsylvania              183600000     174000    1055.1724
+## 35                Idaho               31400000      30000    1046.6667
+## 36            Minnesota               84700000      82000    1032.9268
+## 37             Michigan              113900000     111000    1026.1261
+## 38       South Carolina               99100000      97000    1021.6495
+## 39             Maryland              261500000     259000    1009.6525
+## 40           New Jersey              424100000     428000     990.8879
+## 41                Maine                4900000       5000     980.0000
+## 42            Wisconsin               71500000      76000     940.7895
+## 43             Missouri               52800000      57000     926.3158
+## 44             Virginia              244700000     274000     893.0657
+## 45        Massachusetts              160700000     198000     811.6162
+## 46               Alaska                3900000       6000     650.0000
+## 47              Vermont                2400000       4000     600.0000
+## 48               Oregon               65400000     112000     583.9286
+## 49             Delaware               12100000      28000     432.1429
+## 50              Montana                 400000       1000     400.0000
+## 51        New Hampshire                4000000      13000     307.6923</code></pre>
+<pre class="r"><code>#Total - 
+mix |&gt; 
+  select(state, total_state_and_local_taxes, population) |&gt; 
+  mutate(total_capita = total_state_and_local_taxes/population) |&gt; 
+  arrange(desc(total_capita))</code></pre>
+<pre><code>##                   state total_state_and_local_taxes population total_capita
+## 1              New York                  3102700000     676000     4589.793
+## 2  District of Columbia                    73600000      17000     4329.412
+## 3                Hawaii                   157200000      39000     4030.769
+## 4              Illinois                  1551300000     422000     3676.066
+## 5            Washington                   997300000     276000     3613.406
+## 6            California                  8470100000    2434000     3479.910
+## 7           Connecticut                   406400000     117000     3473.504
+## 8         Massachusetts                   649800000     198000     3281.818
+## 9          Rhode Island                    94900000      29000     3272.414
+## 10               Oregon                   353100000     112000     3152.679
+## 11                Maine                    15600000       5000     3120.000
+## 12           New Jersey                  1325500000     428000     3096.963
+## 13             Maryland                   779300000     259000     3008.880
+## 14         Pennsylvania                   523100000     174000     3006.322
+## 15                 Iowa                   124300000      42000     2959.524
+## 16             Arkansas                   188200000      64000     2940.625
+## 17            Louisiana                   181000000      64000     2828.125
+## 18               Nevada                   507100000     180000     2817.222
+## 19             Colorado                   436500000     156000     2798.077
+## 20               Kansas                   208200000      75000     2776.000
+## 21              Indiana                   285900000     105000     2722.857
+## 22            Minnesota                   221700000      82000     2703.659
+## 23             Nebraska                   113100000      42000     2692.857
+## 24              Arizona                   704000000     263000     2676.806
+## 25              Wyoming                    15800000       6000     2633.333
+## 26            Wisconsin                   198900000      76000     2617.105
+## 27                Texas                  4872500000    1863000     2615.405
+## 28             Michigan                   290100000     111000     2613.514
+## 29        West Virginia                    10400000       4000     2600.000
+## 30             Oklahoma                   227500000      89000     2556.180
+## 31                 Utah                   235100000      92000     2555.435
+## 32                 Ohio                   265400000     104000     2551.923
+## 33              Georgia                   928500000     364000     2550.824
+## 34           New Mexico                   153800000      61000     2521.311
+## 35             Virginia                   689800000     274000     2517.518
+## 36              Florida                  1844300000     747000     2468.942
+## 37                Idaho                    71900000      30000     2396.667
+## 38              Alabama                   146000000      61000     2393.443
+## 39          Mississippi                    49900000      21000     2376.190
+## 40            Tennessee                   314200000     134000     2344.776
+## 41             Kentucky                   118900000      51000     2331.373
+## 42       North Carolina                   692200000     314000     2204.459
+## 43       South Carolina                   213800000      97000     2204.124
+## 44               Alaska                    12600000       6000     2100.000
+## 45             Delaware                    57000000      28000     2035.714
+## 46              Montana                     2000000       1000     2000.000
+## 47             Missouri                   113700000      57000     1994.737
+## 48              Vermont                     7900000       4000     1975.000
+## 49         North Dakota                    12900000       7000     1842.857
+## 50         South Dakota                    14300000       8000     1787.500
+## 51        New Hampshire                    23100000      13000     1776.923</code></pre>
 <pre class="r"><code># Other Taxes by State
 data |&gt; 
   select(state, other_taxes) |&gt; 
@@ -813,7 +949,6 @@ policies)?</p></li>
 <li><p>What are the other taxes undocumented immigrants pay and why do
 Californian undocumented immigrants pay almost 40% of nationwide other
 taxes.</p></li>
-<li><p>How</p></li>
 </ul>
 </div>
 <div id="data-details" class="section level1">

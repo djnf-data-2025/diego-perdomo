@@ -40,6 +40,25 @@ investigate:
         U.S. sees nearly \$100 billion in tax contributions to federal
         social programs that do not return to undocumented taxpayers
 
+-   Which states receive the most in specific taxes like sales and
+    income
+
+    -   Are per capita tax rates higher than citizen per capita tax
+        rates in specific states?
+
+Given the missing data on the exact counts of undocumented immigrants,
+it would be interesting to examine:
+
+-   How other tax policy think tanks measure immigrant contributions
+
+    -   Particularly the methodology of these studies and what
+        assumptions they make from the holes in their data.
+
+-   Other instances of immigrant contribution to federal, state and
+    local revenue
+
+    -   Commerce and census data pertaining to income and nativity
+
 # Instructions
 
 A demo notebook for Dow Jones News Fund data interns:
@@ -226,7 +245,19 @@ data |>
   arrange(desc(property_taxes))
 
 ##Per capita
-#
+mix <- inner_join(data, undoc_immigrant_income_pop, by = "state")
+
+#Sales - likely dependent on sales tax rates and population
+mix |> 
+  select(state, sales_and_excise_taxes, population) |> 
+  mutate(sales_capita = sales_and_excise_taxes/population) |> 
+  arrange(desc(sales_capita))
+
+#Total - 
+mix |> 
+  select(state, total_state_and_local_taxes, population) |> 
+  mutate(total_capita = total_state_and_local_taxes/population) |> 
+  arrange(desc(total_capita))
 ```
 
 ```{r}
@@ -254,8 +285,6 @@ Write down questions you want answered:
 -   What are the other taxes undocumented immigrants pay and why do
     Californian undocumented immigrants pay almost 40% of nationwide
     other taxes.
-
--   How
 
 # Data Details
 
