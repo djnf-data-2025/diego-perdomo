@@ -13,7 +13,7 @@ In May, federal courts permitted immigration agencies to access
 confidential, personal information of up to 7 million undocumented
 immigrant taxpayers. This is the first instance where the Internal
 Revenue Service has shared confidential information for the purposes of
-immigration investigation. **#rsw comment: attribution? \#**
+immigration investigation, according to the National Immigration Forum.
 
 Since 1996, the IRS has permitted people with noncitizen status to file
 their taxes through the Individual Taxpayer Identification Number. The
@@ -63,43 +63,8 @@ it would be interesting to examine:
 
 Through this research, I intend to add new comparisons to data that has
 been discussed among spaces that report on immigrants and taxes for
-almost 11 months. Through national and state level analysis, I would
-like to produce research that could empower deep dives into communities
-who are having their trust in public assistance programs eroded as their
-private information gets shared by those entities.
-
-**#rsw comment: cut, make this project focused on your own work**
-
-# ~~Instructions~~
-
-~~A demo notebook for Dow Jones News Fund data interns:~~
-
-~~During the week’s training, you will work on a project called
-Investigate Your Community to produce detailed story pitches relevant to
-their summer internship positions. The goal is to have the students
-research a topic relevant to your newsroom so they can get to work
-immediately at the internship.~~
-
-~~Here are some examples from last year’s DJNF data journalism
-training:~~
-
-~~Hannah Rosenberger, at ASI Media/Counselor magazine, produced this
-analysis on name, image and likeness trends:
-<https://hrosenberger.github.io/ASI-NIL-Project/>~~
-
-~~Shifra Dayak, an intern at the Connecticut Mirror, produced this
-analysis of environment spill data:
-<https://shifradayak.github.io/DJNF_Merrill/ct_env_spills.html>.~~
-
-~~Michael Zhang, an intern at the Houston Landing, explored local
-election data:
-<https://michaelzhangreporter.github.io/Houston_Campaign_Finance/>~~
-
-~~Here's what your newsroom suggested for a project:~~
-
-***The team has decided to request Diego research people paying taxes to
-the IRS via ITIN number. Please let me know if you have any
-questions.cHave a great weekend! Yolanda***
+almost 11 months. **#rsw comment: cut, make this project focused on your
+own work**
 
 This notebook helps you get started by extracting data from Table 1 of
 this report: <https://itep.org/undocumented-immigrants-taxes-2024/>
@@ -115,6 +80,7 @@ library(tidyverse)
 library(janitor)
 library(readxl)
 library(rvest)
+library(DT)
 ```
 
 The Institute on Economic Policy estimates of 11 million undocumented
@@ -173,6 +139,7 @@ colnames(undoc_immigrant_income_pop_clean) <-     undoc_immigrant_income_pop[1,]
 undoc_immigrant_income_pop_clean <- undoc_immigrant_income_pop_clean[-1,]
 rownames(undoc_immigrant_income_pop_clean) <- 1:nrow(undoc_immigrant_income_pop_clean)
 
+
 ```
 
 # Cleaning
@@ -211,8 +178,6 @@ write_csv(undoc_immigrant_income_pop, "../data/aggregate_income_undoc_2022.csv")
 #Remember to credit the source in your articles: Institute on Taxation and Economic Policy
 ```
 
-~~#BACKUP CODE FOR LATER~~
-
 ```{r}
 # Load your data
 
@@ -245,13 +210,17 @@ glimpse(data)
 
 # Data exploration: taxes paid
 
-```{r}
+## State and Local Taxes
+
+```{r echo=F}
 ##Decending Totals
 #Total State and Local 
 data |> 
   select(state, total_state_and_local_taxes) |> 
   arrange(desc(total_state_and_local_taxes))
+```
 
+```{r}
 #Total Sales Tax 
 data |> 
   select(state, sales_and_excise_taxes) |> 
@@ -261,31 +230,31 @@ data |>
 data |> 
   select(state, property_taxes) |> 
   arrange(desc(property_taxes))
-
-##Per capita
-mix <- inner_join(data, undoc_immigrant_income_pop, by = "state")
-
-#Sales - likely dependent on sales tax rates and population
-mix |> 
-  select(state, sales_and_excise_taxes, population) |> 
-  mutate(sales_capita = sales_and_excise_taxes/population) |> 
-  arrange(desc(sales_capita))
-
-#Total - 
-mix |> 
-  select(state, total_state_and_local_taxes, population) |> 
-  mutate(total_capita = total_state_and_local_taxes/population) |> 
-  arrange(desc(total_capita))
 ```
 
-#rsw comment: try using datatable to display these tables in a nice html
-format
+```{r hide=T,}
+#Per capita
+undoc_immigrant_taxes_income <- inner_join(data, undoc_immigrant_income_pop, by = "state")
 
-library(DT)
+#Sales - likely dependent on sales tax rates and population
+undoc_immigrant_taxes_income <- undoc_immigrant_taxes_income |> 
+  mutate(sales_capita = sales_and_excise_taxes/population,
+         property_capita = property_taxes/population,
+         personal_and_business_income_capita = personal_and_business_income_taxes/population,
+         other_capita = other_taxes/population,
+         total_capita = total_state_and_local_taxes/population)
 
-datatable(DF, caption = "HEADLINE", options = list(pageLength = 20))
+#Export and do visual analysis on datawrapper to visualize trends
+write.csv(undoc_immigrant_taxes_income, "../data/taxes_capita_undoc_2022.csv")
 
-```{r}
+datatable(undoc_immigrant_income_pop, caption = "HEADLINE", options = list(pageLength = 20)) 
+```
+
+
+<iframe title="NY undocumented workers top income tax rate" aria-label="Map" id="datawrapper-chart-6UITi" src="https://datawrapper.dwcdn.net/6UITi/5/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="400" data-external="1"></iframe><script type="text/javascript">!function(){"use strict";window.addEventListener("message",(function(a){if(void 0!==a.data["datawrapper-height"]){var e=document.querySelectorAll("iframe");for(var t in a.data["datawrapper-height"])for(var r,i=0;r=e[i];i++)if(r.contentWindow===a.source){var d=a.data["datawrapper-height"][t]+"px";r.style.height=d}}}))}();
+</script>
+
+```{r hide=T}
 # Other Taxes by State
 data |> 
   select(state, other_taxes) |> 
