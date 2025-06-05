@@ -10,10 +10,15 @@ editor_options:
 # Pitch
 
 In May, federal courts permitted immigration agencies to access
-confidential, personal information of up to 7 million undocumented
+confidential, personal information of up to seven million undocumented
 immigrant taxpayers. This is the first instance where the Internal
 Revenue Service has shared confidential information for the purposes of
 immigration investigation, according to the National Immigration Forum.
+
+Required by law to file taxes regardless of citizenship, America's
+undocumented immigrants, estimated at 11 million in 2022, are
+responsible for nearly \$100 billion of contributions to federal, state
+and local governments in 2022.
 
 Since 1996, the IRS has permitted people with noncitizen status to file
 their taxes through the Individual Taxpayer Identification Number. The
@@ -22,28 +27,21 @@ their taxes and receive select tax credits, fell under scrutiny in
 recent federal court hearings and prompted the landmark collaboration
 between the Department of Homeland Security and Department of Treasury.
 
-With new questions of undocumented immigrants' relationship to taxes, I
-think it would be timely and relevant to Futuro’s audience to
-investigate:
+With new questions of undocumented immigrants' relationship to taxes and
+rising confidentiality concerns, I think it would be timely and relevant
+to Futuro’s audience to investigate:
+
+-   Where the \$96.7 billion in contributions from undocumented
+    immigrants goes to.
+
+    -   Data visualizations like charts and maps to describe state-level
+        rates for each tax revenue type (income, federal, sales, etc.)
 
 -   How undocumented taxpayer contributions differ in makeup from
     citizen taxpayers
 
     -   The portfolio of taxes undocumented immigrants contribute
-        compared to the U.S. total of tax revenue (grouped bar chart
-        with a stacked bar to show how percentages would be if
-        undocumented immigrants filed with legal status)
-
--   The scale of \$96.7 billion in contributions from undocumented
-    immigrant tax contributions
-
-    -   With nearly 11 million estimated undocumented immigrants, the
-
--   Which states receive the most in specific taxes like sales and
-    income
-
-    -   Are per capita tax rates higher than citizen per capita tax
-        rates in specific states?
+        compared to the U.S. total of tax revenue
 
 Given the missing data on the exact counts of undocumented immigrants,
 it would be interesting to examine:
@@ -58,13 +56,10 @@ it would be interesting to examine:
 
     -   Commerce and census data pertaining to income and nativity
 
-Through this research, I intend to add new comparisons to data that has
+Through this research, I intend to add new analysis to data that has
 been discussed among spaces that report on immigrants and taxes for
 almost 11 months and prepare information for followup articles as the
-story develops
-
-This notebook helps you get started by extracting data from Table 1 of
-this report: <https://itep.org/undocumented-immigrants-taxes-2024/>
+story develops.
 
 # Load software libraries
 
@@ -80,7 +75,9 @@ library(rvest)
 library(DT)
 ```
 
-# Scrape a table from this website
+# Scraping html tables from website
+
+From \$96.7 billion, a third is spent on state and local taxes
 
 <https://itep.org/undocumented-immigrants-taxes-2024/> APPENDIX TABLE 1.
 
@@ -231,12 +228,21 @@ undoc_immigrant_taxes_income <- undoc_immigrant_taxes_income |>
          property_capita = property_taxes/population,
          personal_and_business_income_capita = personal_and_business_income_taxes/population,
          other_capita = other_taxes/population,
-         total_capita = total_state_and_local_taxes/population)
+         total_capita = total_state_and_local_taxes/population) 
+
+dt_undoc_tax_income <- undoc_immigrant_taxes_income |> 
+  select(state,personal_and_business_income_capita,sales_capita, property_capita, total_capita) |> 
+  rename(State="state",
+         `Individual and Business Income Rate` = "personal_and_business_income_capita",
+         `Sales Rate` = "sales_capita",
+         `Property Rate` = "property_capita",
+         `Total Rate` = "total_capita")
 
 #Export and do visual analysis on datawrapper to visualize trends
 write.csv(undoc_immigrant_taxes_income, "../data/taxes_capita_undoc_2022.csv")
 
-datatable(undoc_immigrant_income_pop, caption = "HEADLINE", options = list(pageLength = 20)) 
+datatable(dt_undoc_tax_income, caption = "Contributions to local and state taxes from undocumented immigrants", options = list(pageLength = 20)) |> 
+  formatCurrency(c('Individual and Business Income Rate','Sales Rate','Property Rate','Total Rate'),currency = "$", interval = 3, mark = ",")
 ```
 
 <iframe title="NY undocumented workers top income tax rate" aria-label="Map" id="datawrapper-chart-6UITi" src="https://datawrapper.dwcdn.net/6UITi/6/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="400" data-external="1">
