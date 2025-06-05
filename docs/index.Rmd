@@ -22,7 +22,7 @@ their taxes and receive select tax credits, fell under scrutiny in
 recent federal court hearings and prompted the landmark collaboration
 between the Department of Homeland Security and Department of Treasury.
 
-With new questions of undocumented immigrant’s relationship to taxes, I
+With new questions of undocumented immigrants' relationship to taxes, I
 think it would be timely and relevant to Futuro’s audience to
 investigate:
 
@@ -34,13 +34,10 @@ investigate:
         with a stacked bar to show how percentages would be if
         undocumented immigrants filed with legal status)
 
--   The impact of the current undocumented tax contributions **#rsw
-    comment: great but let's clarify - so undocumented people contribute
-    \$100 bln to the economy? \#**
+-   The scale of \$96.7 billion in contributions from undocumented
+    immigrant tax contributions
 
     -   With nearly 11 million estimated undocumented immigrants, the
-        U.S. sees nearly \$100 billion in tax contributions to federal
-        social programs that do not return to undocumented taxpayers
 
 -   Which states receive the most in specific taxes like sales and
     income
@@ -63,15 +60,15 @@ it would be interesting to examine:
 
 Through this research, I intend to add new comparisons to data that has
 been discussed among spaces that report on immigrants and taxes for
-almost 11 months. **#rsw comment: cut, make this project focused on your
-own work**
+almost 11 months and prepare information for followup articles as the
+story develops
 
 This notebook helps you get started by extracting data from Table 1 of
 this report: <https://itep.org/undocumented-immigrants-taxes-2024/>
 
 # Load software libraries
 
-```{r}
+```{r setup, include=FALSE}
 #install.packages("tidyverse")
 #install.packages("janitor")
 #install.packages("readxl")
@@ -83,19 +80,9 @@ library(rvest)
 library(DT)
 ```
 
-The Institute on Economic Policy estimates of 11 million undocumented
-immigrants in the U.S.
-
-Contributing almost 100 billion in taxes
-
 # Scrape a table from this website
 
 <https://itep.org/undocumented-immigrants-taxes-2024/> APPENDIX TABLE 1.
-
-#RSW comment: **Let's integrate the code better with the narrative.
-Explain that this is a source of undocumented immigrant tax
-contributions by various types. point out the top states by type (sales,
-income, etc) and provide some details about patterns**
 
 State and Local Tax Contributions by the Undocumented Immigrant
 Population in 2022
@@ -121,6 +108,8 @@ new_headers <- as.character(data[1, ])
 data_clean <- data[-1, ] # Remove the first row
 colnames(data_clean) <- new_headers
 ```
+
+<https://itep.org/undocumented-immigrants-taxes-2024/> APPENDIX TABLE 5.
 
 ```{r}
 #Undocumented immigrants population and income data, 2022
@@ -250,9 +239,14 @@ write.csv(undoc_immigrant_taxes_income, "../data/taxes_capita_undoc_2022.csv")
 datatable(undoc_immigrant_income_pop, caption = "HEADLINE", options = list(pageLength = 20)) 
 ```
 
+<iframe title="NY undocumented workers top income tax rate" aria-label="Map" id="datawrapper-chart-6UITi" src="https://datawrapper.dwcdn.net/6UITi/6/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="400" data-external="1">
 
-<iframe title="NY undocumented workers top income tax rate" aria-label="Map" id="datawrapper-chart-6UITi" src="https://datawrapper.dwcdn.net/6UITi/5/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="400" data-external="1"></iframe><script type="text/javascript">!function(){"use strict";window.addEventListener("message",(function(a){if(void 0!==a.data["datawrapper-height"]){var e=document.querySelectorAll("iframe");for(var t in a.data["datawrapper-height"])for(var r,i=0;r=e[i];i++)if(r.contentWindow===a.source){var d=a.data["datawrapper-height"][t]+"px";r.style.height=d}}}))}();
+</iframe>
+
+```{=html}
+<script type="text/javascript">!function(){"use strict";window.addEventListener("message",(function(a){if(void 0!==a.data["datawrapper-height"]){var e=document.querySelectorAll("iframe");for(var t in a.data["datawrapper-height"])for(var r,i=0;r=e[i];i++)if(r.contentWindow===a.source){var d=a.data["datawrapper-height"][t]+"px";r.style.height=d}}}))}();
 </script>
+```
 
 ```{r hide=T}
 # Other Taxes by State
