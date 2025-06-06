@@ -1,13 +1,12 @@
 ---
-title: "Diego Perdomo - Futuro Media"
+title: "Undocumented immigrants contribute $100 billion through taxes"
+author: "Diego Perdomo for Futuro Media Group"
 output: html_document
-date: "2025-04-22"
+date: "2025-06-07"
 editor_options: 
   markdown: 
     wrap: 72
 ---
-
-# Pitch
 
 In May, federal courts permitted immigration agencies to access
 confidential, personal information of up to seven million undocumented
@@ -18,7 +17,11 @@ immigration investigation, according to the National Immigration Forum.
 Required by law to file taxes regardless of citizenship, America's
 undocumented immigrants, estimated at 11 million in 2022, are
 responsible for nearly \$100 billion of contributions to federal, state
-and local governments in 2022.
+and local governments in 2022, according to a July report from Institute
+on Taxation and Economic Policy.
+
+<iframe title="NY undocumented pay highest rate to local, state taxes" aria-label="Map" id="datawrapper-chart-ADPu9" src="https://datawrapper.dwcdn.net/ADPu9/3/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="570" data-external="1"></iframe><script type="text/javascript">!function(){"use strict";window.addEventListener("message",(function(a){if(void 0!==a.data["datawrapper-height"]){var e=document.querySelectorAll("iframe");for(var t in a.data["datawrapper-height"])for(var r,i=0;r=e[i];i++)if(r.contentWindow===a.source){var d=a.data["datawrapper-height"][t]+"px";r.style.height=d}}}))}();
+</script>
 
 Since 1996, the IRS has permitted people with noncitizen status to file
 their taxes through the Individual Taxpayer Identification Number. The
@@ -243,15 +246,6 @@ write.csv(undoc_immigrant_taxes_income, "../data/taxes_capita_undoc_2022.csv")
 
 datatable(dt_undoc_tax_income, caption = "Contributions to local and state taxes from undocumented immigrants", options = list(pageLength = 20)) |> 
   formatCurrency(c('Individual and Business Income Rate','Sales Rate','Property Rate','Total Rate'),currency = "$", interval = 3, mark = ",")
-```
-
-<iframe title="NY undocumented workers top income tax rate" aria-label="Map" id="datawrapper-chart-6UITi" src="https://datawrapper.dwcdn.net/6UITi/6/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="400" data-external="1">
-
-</iframe>
-
-```{=html}
-<script type="text/javascript">!function(){"use strict";window.addEventListener("message",(function(a){if(void 0!==a.data["datawrapper-height"]){var e=document.querySelectorAll("iframe");for(var t in a.data["datawrapper-height"])for(var r,i=0;r=e[i];i++)if(r.contentWindow===a.source){var d=a.data["datawrapper-height"][t]+"px";r.style.height=d}}}))}();
-</script>
 ```
 
 ```{r hide=T}
