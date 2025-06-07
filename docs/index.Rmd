@@ -197,7 +197,7 @@ glimpse(undoc_imm_taxes)
 Upon using analysis to sort the data by each column descending, I
 realized that many of the tax totals were just population
 
-```{r hide=T, include=FALSE}
+```{r}
 # Income total by State
 undoc_imm_taxes |> 
   select(state, personal_and_business_income_taxes) |> 
