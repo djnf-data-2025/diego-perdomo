@@ -18,10 +18,16 @@ Required by law to file taxes regardless of citizenship, America's
 undocumented immigrants, estimated at 11 million in 2022, are
 responsible for nearly \$100 billion of contributions to federal, state
 and local governments in 2022, according to a July report from Institute
-on Taxation and Economic Policy.
+on Taxation and Economic Policy (ITEP).
 
-<iframe title="NY undocumented pay highest rate to local, state taxes" aria-label="Map" id="datawrapper-chart-ADPu9" src="https://datawrapper.dwcdn.net/ADPu9/3/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="570" data-external="1"></iframe><script type="text/javascript">!function(){"use strict";window.addEventListener("message",(function(a){if(void 0!==a.data["datawrapper-height"]){var e=document.querySelectorAll("iframe");for(var t in a.data["datawrapper-height"])for(var r,i=0;r=e[i];i++)if(r.contentWindow===a.source){var d=a.data["datawrapper-height"][t]+"px";r.style.height=d}}}))}();
+<iframe title="NY undocumented pay highest rate to local, state taxes" aria-label="Map" id="datawrapper-chart-ADPu9" src="https://datawrapper.dwcdn.net/ADPu9/5/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="556" data-external="1">
+
+</iframe>
+
+```{=html}
+<script type="text/javascript">!function(){"use strict";window.addEventListener("message",(function(a){if(void 0!==a.data["datawrapper-height"]){var e=document.querySelectorAll("iframe");for(var t in a.data["datawrapper-height"])for(var r,i=0;r=e[i];i++)if(r.contentWindow===a.source){var d=a.data["datawrapper-height"][t]+"px";r.style.height=d}}}))}();
 </script>
+```
 
 Since 1996, the IRS has permitted people with noncitizen status to file
 their taxes through the Individual Taxpayer Identification Number. The
@@ -34,8 +40,8 @@ With new questions of undocumented immigrants' relationship to taxes and
 rising confidentiality concerns, I think it would be timely and relevant
 to Futuro’s audience to investigate:
 
--   Where the \$96.7 billion in contributions from undocumented
-    immigrants goes to.
+-   The portfolio of state and local taxes undocumented immigrants
+    contribute to with \$37.3 billion
 
     -   Data visualizations like charts and maps to describe state-level
         rates for each tax revenue type (income, federal, sales, etc.)
@@ -64,7 +70,7 @@ been discussed among spaces that report on immigrants and taxes for
 almost 11 months and prepare information for followup articles as the
 story develops.
 
-# Load software libraries
+#Preparation \## Load software libraries
 
 ```{r setup, include=FALSE}
 #install.packages("tidyverse")
@@ -78,14 +84,20 @@ library(rvest)
 library(DT)
 ```
 
-# Scraping html tables from website
+## Scraping html for tables from ITEP website
 
-From \$96.7 billion, a third is spent on state and local taxes
+From \$96.7 billion, a third is spent on state and local taxes. In their
+"Tax Payments by Undocumented Immigrants" report, ITEP created an
+estimate of the undocumented immigrant population through microdata
+provided by the census's five-year recurring American Community Survey.
+With that data, they made further estimates to approximate their tax
+contributions to federal, state and local governments. To dissect this
+data further, we decided to scrape it from the website's table and clean
+it for state by state comparisons. The charts, Appendix Table 1
+(state/local tax totals) and Appendix Table 5 (population estimates),
+were read and copied from the site using an XPath scraping method.
 
-<https://itep.org/undocumented-immigrants-taxes-2024/> APPENDIX TABLE 1.
-
-State and Local Tax Contributions by the Undocumented Immigrant
-Population in 2022
+### XPath for tax table
 
 ```{r}
 #State local tax contribs from undoc immigrants in 2022
@@ -94,8 +106,7 @@ url <- "https://itep.org/undocumented-immigrants-taxes-2024/"
 html <- read_html(url)
 
 # Extract the relevant information using XPath
-# I'll show you how to do this.
-data <- html %>%
+undoc_imm_taxes <- html %>%
   html_nodes(xpath = "/html/body/div/div/div[2]/div/div[1]/div[1]/div[4]/table") %>%
   html_nodes("td") %>%
   html_text() %>%
@@ -103,39 +114,37 @@ data <- html %>%
   as.data.frame(stringsAsFactors = FALSE)
 
 # Assign column names
-
-new_headers <- as.character(data[1, ])
-data_clean <- data[-1, ] # Remove the first row
-colnames(data_clean) <- new_headers
+new_headers <- as.character(undoc_imm_taxes[1, ])
+undoc_imm_taxes_clean <- undoc_imm_taxes[-1, ] # Remove the first row
+colnames(undoc_imm_taxes_clean) <- new_headers
 ```
 
-<https://itep.org/undocumented-immigrants-taxes-2024/> APPENDIX TABLE 5.
+### XPath for population table
 
 ```{r}
 #Undocumented immigrants population and income data, 2022
-undoc_immigrant_income_pop <- html |> 
+#Read html for other table
+undoc_imm_income_pop <- html |> 
   html_nodes(xpath = "/html/body/div[1]/div/div[2]/div/div[1]/div[1]/div[8]/table") |> 
   html_nodes("td") |> 
   html_text() |> 
   matrix(ncol = 3, byrow = TRUE) |> 
   as.data.frame(stringsAsFactors = FALSE)
 
-###Make top consistent
-undoc_immigrant_income_pop_clean <- undoc_immigrant_income_pop 
+#Column Names
+undoc_imm_income_pop_clean <- undoc_imm_income_pop 
 
-colnames(undoc_immigrant_income_pop_clean) <-     undoc_immigrant_income_pop[1,]
+colnames(undoc_imm_income_pop_clean) <- undoc_imm_income_pop[1,]
 
-undoc_immigrant_income_pop_clean <- undoc_immigrant_income_pop_clean[-1,]
-rownames(undoc_immigrant_income_pop_clean) <- 1:nrow(undoc_immigrant_income_pop_clean)
-
-
+undoc_imm_income_pop_clean <- undoc_imm_income_pop_clean[-1,]
+rownames(undoc_imm_income_pop_clean) <- 1:nrow(undoc_imm_income_pop_clean)
 ```
 
 # Cleaning
 
-```{r}
-#Cleaning state local tax contribs from undoc immigrants in 2022
-data <- data_clean |> 
+```{r, warning=FALSE, message=FALSE}
+#Cleaning state local tax contribs from undocumented immigrants, 2022
+undoc_imm_taxes <- undoc_imm_taxes_clean |> 
   clean_names() |> 
   #remove dollar signs
   mutate(
@@ -146,15 +155,14 @@ data <- data_clean |>
     total_state_and_local_taxes=as.numeric(parse_number(total_state_and_local_taxes)),
      effective_tax_rate=as.numeric(parse_number(effective_tax_rate)),
     )
-
-write.csv(data, "../data/state_local_tax_undoc_2022.csv")
+write.csv(undoc_imm_taxes, "../data/state_local_tax_undoc_2022.csv")
 
 #Remember to credit the source in your articles: Institute on Taxation and Economic Policy
 ```
 
 ```{r}
 #Cleaning undocumented immigrant population and income data
-undoc_immigrant_income_pop <- undoc_immigrant_income_pop_clean |> 
+undoc_imm_income_pop <- undoc_imm_income_pop_clean |> 
   clean_names() |> 
   #remove dollar signs
   mutate(
@@ -162,31 +170,16 @@ undoc_immigrant_income_pop <- undoc_immigrant_income_pop_clean |>
     aggregate_income=as.numeric(parse_number(aggregate_income))
     )
 
-write_csv(undoc_immigrant_income_pop, "../data/aggregate_income_undoc_2022.csv")
+write_csv(undoc_imm_income_pop, "../data/aggregate_income_undoc_2022.csv")
 
 #Remember to credit the source in your articles: Institute on Taxation and Economic Policy
 ```
-
-```{r}
-# Load your data
-
-# YOUR_DATA <- read.csv("../data/XXXXX.csv") |> 
-#     clean_names()
-
-# data <- read_excel("../data/2024-12-Revenue.xlsx", skip=2) |> 
-#     clean_names()
-
-```
-
-Data details:
 
 # Explore the data types
 
 ```{r}
 
-#glimpse(YOUR_DATA)
-
-glimpse(data)
+glimpse(undoc_imm_taxes)
 
 ```
 
@@ -201,39 +194,50 @@ glimpse(data)
 
 ## State and Local Taxes
 
-```{r echo=F}
-##Decending Totals
-#Total State and Local 
-data |> 
-  select(state, total_state_and_local_taxes) |> 
-  arrange(desc(total_state_and_local_taxes))
-```
+Upon using analysis to sort the data by each column descending, I
+realized that many of the tax totals were just population
 
-```{r}
-#Total Sales Tax 
-data |> 
-  select(state, sales_and_excise_taxes) |> 
-  arrange(desc(sales_and_excise_taxes))
-
-#Total Property 
-data |> 
+```{r hide=T, include=FALSE}
+# Income total by State
+undoc_imm_taxes |> 
+  select(state, personal_and_business_income_taxes) |> 
+  arrange(desc(personal_and_business_income_taxes)) |> 
+  head(5)
+# Property total by State
+undoc_imm_taxes |> 
   select(state, property_taxes) |> 
-  arrange(desc(property_taxes))
+  arrange(desc(property_taxes)) |> 
+  head(5)
+# Sales total by State
+undoc_imm_taxes |> 
+  select(state, sales_and_excise_taxes) |> 
+  arrange(desc(sales_and_excise_taxes)) |> 
+  head(5)
+# Other total by State
+undoc_imm_taxes |> 
+  select(state, other_taxes) |> 
+  arrange(desc(other_taxes)) |> 
+  head(5)
+# State/local total by State
+undoc_imm_taxes |> 
+  select(state, total_state_and_local_taxes) |> 
+  arrange(desc(total_state_and_local_taxes)) |> 
+  head(5)
 ```
 
-```{r hide=T,}
+```{r, echo=FALSE}
 #Per capita
-undoc_immigrant_taxes_income <- inner_join(data, undoc_immigrant_income_pop, by = "state")
+undoc_imm_taxes_income <- inner_join(undoc_imm_taxes, undoc_imm_income_pop, by = "state")
 
 #Sales - likely dependent on sales tax rates and population
-undoc_immigrant_taxes_income <- undoc_immigrant_taxes_income |> 
+undoc_imm_taxes_income <- undoc_imm_taxes_income |> 
   mutate(sales_capita = sales_and_excise_taxes/population,
          property_capita = property_taxes/population,
          personal_and_business_income_capita = personal_and_business_income_taxes/population,
          other_capita = other_taxes/population,
          total_capita = total_state_and_local_taxes/population) 
 
-dt_undoc_tax_income <- undoc_immigrant_taxes_income |> 
+dt_undoc_tax_income <- undoc_imm_taxes_income |> 
   select(state,personal_and_business_income_capita,sales_capita, property_capita, total_capita) |> 
   rename(State="state",
          `Individual and Business Income Rate` = "personal_and_business_income_capita",
@@ -242,23 +246,18 @@ dt_undoc_tax_income <- undoc_immigrant_taxes_income |>
          `Total Rate` = "total_capita")
 
 #Export and do visual analysis on datawrapper to visualize trends
-write.csv(undoc_immigrant_taxes_income, "../data/taxes_capita_undoc_2022.csv")
+write.csv(undoc_imm_taxes_income, "../data/taxes_capita_undoc_2022.csv")
 
-datatable(dt_undoc_tax_income, caption = "Contributions to local and state taxes from undocumented immigrants", options = list(pageLength = 20)) |> 
+datatable(dt_undoc_tax_income,
+          caption = htmltools::tags$caption(
+            style = 'caption-side: top; text-align: center; font-size: 24px; font-weight: bold; padding: 10px;',
+            "Contributions to local and state taxes from undocumented immigrants"
+          ),
+          options = list(
+            pageLength = 20,
+            order = list(list(5, 'desc'))  # Sort by 4th column (Total Rate) descending
+          )) |>  
   formatCurrency(c('Individual and Business Income Rate','Sales Rate','Property Rate','Total Rate'),currency = "$", interval = 3, mark = ",")
-```
-
-```{r hide=T}
-# Other Taxes by State
-data |> 
-  select(state, other_taxes) |> 
-  arrange(desc(other_taxes))
-
-
-```
-
-```{r}
-#data |> 
 ```
 
 # Questions
@@ -275,33 +274,3 @@ Write down questions you want answered:
 -   What are the other taxes undocumented immigrants pay and why do
     Californian undocumented immigrants pay almost 40% of nationwide
     other taxes.
-
-# Data Details
-
-You will want to read this article carefully and you will probably want
-to scrape more data from it.
-<https://itep.org/undocumented-immigrants-taxes-2024/>
-
-A very good article about the issue
-<https://unidosus.org/blog/2025/03/24/when-dhs-requests-itin-tax-data-why-every-american-should-be-concerned/>
-
-Background on ITIN
-<https://www.irs.gov/tin/itin/individual-taxpayer-identification-number-itin>
-If you're a resident alien, nonresident alien or their spouse or
-dependent, you can apply for an ITIN regardless of immigration status.
-
-Resident alien or nonresident alien
-
-If you're not a U.S. citizen, your tax status can be either:
-
-Resident alien – If you were present in the U.S. for more than 183
-days\* (substantial presence test) or you’re a lawful permanent resident
-of the U.S. (green card test) Nonresident alien – If you don’t meet
-either the green card or substantial presence test for resident alien
-status. \*Special day-counting rules apply to certain foreign
-government-related individuals, teachers, trainees and students who are
-temporarily present in the U.S. under certain U.S. visas.
-
-Determining your tax residency status
-
-U.S. Tax Guide for Aliens, Publication 519
